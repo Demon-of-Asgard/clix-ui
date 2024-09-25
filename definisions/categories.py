@@ -1,10 +1,11 @@
 import flet as ft
+from ..definisions import path_definitions
 
-def update_categories(page: ft.page):
-    print(1)
+def render_category_list(page: ft.page)->None:
+
     text_field = ft.Row(
         controls=[
-            ft.TextField(value="Hello!!!"),
+            ft.TextField(value="Ello!!!"),
         ]
     )
     page.add(text_field)
