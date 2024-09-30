@@ -1,11 +1,17 @@
-import flet as ft
 import time
-from clix_pages import categories
+import pprint
+from definisions.path_definitions import ClixPaths
 
 
+def main():
+    path_obj = ClixPaths({"root": "/"})
+    path_obj.add_paths({"home": "/root/home", "manu": "/root/home/manu"})
 
-def main(page: ft.Page):
-    categories.main(page)
+    pprint.pprint(path_obj.get_paths())
 
+    path_obj.delete_paths(["root",])
 
-ft.app(main)
+    pprint.pprint(path_obj.get_paths())
+    
+if __name__ == "__main__":
+    main()

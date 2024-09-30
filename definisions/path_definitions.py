@@ -1,74 +1,71 @@
-import os 
 import copy 
-
-class VarMap(object):
-    def __init__(self, name:str, value):
-        self.name:str = name 
-        self.value = value
-    
-    def set_value(self, new_value):
-        self.value = new_value
-    
-    def get_name(self):
-        return self.name 
-    
-    def get_value(self):
-        return self.value 
-    
-    def __repr__(self):
-        return f"variable: {self.name}, value: {self.value}"
-    
 
 
 class ClixPaths(object):
     """Class to hold nesessary path information of clix."""
-    def __init__(self, cwd:str):
+
+    def __init__(self, paths:dict={}):
         """Accepts current working directory as  input. Set other paths relative to cwd"""
-        self.__cwd = VarMap("cwd", cwd)
-        self.__resource_dir = VarMap(
-            "resource_dir", 
-            os.path.join(
-                self.__cwd.value, 
-                "resources"
-            )
-        )
 
+        assert type(paths) == type({}), f"Unexpeter type {type(paths)} for the <var paths>. Expect {type({})}"
+        self.__paths:dict = {}
 
-        self.__category_des = VarMap(
-            "category_des", 
-            os.path.join(
-                self.__cwd.value, self.__resource_dir.value, 
-                "available_arxiv_categories.yaml"
-            )
-        )
-
-       
-        self.__path_keys:list = [
-            "cwd", "resources", "category_description",
-        ]
-
-        self.__all_paths = [
-            self.__cwd, self.__resource_dir, self.__resource_dir
-        ]
-
-
+        for key, value in paths.items():
+            self.__paths[key] = value
         return None 
 
-    def set_paths(self, to_updated:dict)->tuple:
-        """Accepts dictionry of paths as input. Update the values of the """
-        err:list = []
-        iserr:bool = False
-        tobe_updated_keys = to_updated.keys()
-        for key in tobe_updated_keys:
-            if key not in self.__path_keys:
-                err.append(f"UnIdentifiedKeyErr:<{key}>")
-                iserr = True
-            else:
-                for pth in self.__all_paths:
-                    if pth.get_name() == key:
-                        pth.set_value(to_updated[key])
 
-        return (True if iserr else False, err)
+
+    def add_paths(self, tobe_added:dict)->None:
+        """Accepts dictionry of paths as input. Add the values of the 
+        self.__paths dictiory"""
+        assert type(tobe_added) == type({}), f"Unexpeted type {type(tobe_added)} for the <var tobe_added>. Expect {type({})}"
+
+        existing_paths:list = []
+        for key, value in tobe_added.items():
+            if key not in self.__paths.keys():
+                self.__paths[key] = value
+            else:
+                existing_paths.append(key)
+            
+        print(
+            f"Following paths already exists./n" + \
+            f"{existing_paths}./n" + \
+            "You may want to use <update_paths> method to update them."
+        )
+
+        return 
+
+
+    def update_paths(self, tobe_updated:dict)->None:
+        """Accepts dictionry of paths as input. Update the values of the same"""
+        assert type(tobe_updated) == type({}), f"Unexpeted type {type(tobe_updated)} for the <var tobe_updated>. Expect {type({})}"
+        
+        not_existing_paths:list = []
+        for key, value in tobe_updated.items():
+            if key not in self.__paths.keys():
+                self.__paths[key] = value
+            else:
+                not_existing_paths.append(key)
+            
+        print(
+            f"Following paths does not exist./n" + \
+            f"{not_existing_paths}./n" + \
+            "You may want to use <add_paths> method to add them."
+        )
+
+        return 
+
+
+    def delete_paths(self, tobe_deleted:list)->None:
+        assert type(tobe_deleted) == type([]), f"Unexpeted type {type(tobe_deleted)} for the <var tobe_deleted>. Expect {type([])}"
+
+        for key in tobe_deleted:
+            try:del self.__paths[key] 
+            except KeyError: pass
+        return
+
 
     def get_paths(self)->dict:
+        """Returns a copy of self.__paths"""
         return copy.deepcopy(self.__paths)
