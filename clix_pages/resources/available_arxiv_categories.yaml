@@ -18,7 +18,7 @@ condensed-matter:
   cond-mat.supr-con: Superconductivity
 
 GR_and_Quantum_Cosmology:
-  gr-qc: General_Relativityand_Quantum_Cosmology
+  gr-qc: General_Relativity_and_Quantum_Cosmology
 
 HEPH-Pheno:
   hep-ph: High_Energy_Physics-Phenomenology
@@ -31,3 +31,4 @@ HEPH-Experiment:
 
 HEPH-Theory:
   hep-th: High_Energy_Physics-Theory
+
