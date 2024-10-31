@@ -1,4 +1,5 @@
 import copy 
+from typing import (List, Dict, Tuple)
 
 
 class ClixPaths(object):
@@ -7,7 +8,7 @@ class ClixPaths(object):
     def __init__(self, paths:dict={}):
         """Accepts current working directory as  input. Set other paths relative to cwd"""
 
-        assert type(paths) == type({}), f"Unexpeter type {type(paths)} for the <var paths>. Expect {type({})}"
+        assert isinstance(paths, Dict), f"Unexpeted type {type(paths)} for the <var paths>. Expect {Dict}"
         self.__paths:dict = {}
 
         for key, value in paths.items():
@@ -19,7 +20,7 @@ class ClixPaths(object):
     def add_paths(self, tobe_added:dict)->None:
         """Accepts dictionry of paths as input. Add the values of the 
         self.__paths dictiory"""
-        assert type(tobe_added) == type({}), f"Unexpeted type {type(tobe_added)} for the <var tobe_added>. Expect {type({})}"
+        assert isinstance(tobe_added, Dict), f"Unexpeted type {type(tobe_added)} for the <var tobe_added>. Expect {Dict}"
 
         existing_paths:list = []
         for key, value in tobe_added.items():
@@ -39,7 +40,7 @@ class ClixPaths(object):
 
     def update_paths(self, tobe_updated:dict)->None:
         """Accepts dictionry of paths as input. Update the values of the same"""
-        assert type(tobe_updated) == type({}), f"Unexpeted type {type(tobe_updated)} for the <var tobe_updated>. Expect {type({})}"
+        assert isinstance(tobe_updated, Dict), f"Unexpeted type {type(tobe_updated)} for the <var tobe_updated>. Expect {Dict}"
         
         not_existing_paths:list = []
         for key, value in tobe_updated.items():
@@ -58,7 +59,7 @@ class ClixPaths(object):
 
 
     def delete_paths(self, tobe_deleted:list)->None:
-        assert type(tobe_deleted) == type([]), f"Unexpeted type {type(tobe_deleted)} for the <var tobe_deleted>. Expect {type([])}"
+        assert isinstance(tobe_deleted, List), f"Unexpeted type {type(tobe_deleted)} for the <var tobe_deleted>. Expect {List}"
 
         for key in tobe_deleted:
             try:del self.__paths[key] 
@@ -66,6 +67,6 @@ class ClixPaths(object):
         return
 
 
-    def get_paths(self)->dict:
+    def get_paths(self)->Dict:
         """Returns a copy of self.__paths"""
         return copy.deepcopy(self.__paths)
