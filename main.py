@@ -1,12 +1,12 @@
-import os
-import time
-import pprint
 import yaml as yaml
-import flet as ft
-from data_organizer import categories
-from data_organizer.utils import (create_item, )
+from pathlib import Path
+from src.arxiv_items import Item
+from typing import (Union, List, Dict, Tuple)
 
-def read_yaml(fpath:str)->dict:
+import flet as ft
+from pages import render_category 
+
+def read_yaml(fpath:Union[str, Path])->dict:
     data:dict = {}
     with open(fpath, "r") as f:
         data.update(yaml.load(f, Loader=yaml.FullLoader))
@@ -30,28 +30,29 @@ def print_dict(data_dict:dict, carry:int=0, end_line:str="\n")->None:
         else:
             print(f"{'\t'*(carry)}{key}: {value}")
 
-    
 
 
 def main(page:ft.Page)->None:
-    cats_and_subcats:dict = read_yaml(
-        os.path.join("clix_pages", "resources", "available_arxiv_categories.yaml")
-    )
-
-    id = 0
-    item_list:list = []
-    for key, value in cats_and_subcats.items():
-        item_list.append({key:value})
-    # for key, value in data.items():
-    #     item_list.append(create_item(id=id, item={key:value}))
     
-    for item in item_list:
-        categories.render_category_list(page, item)
-        # print(item)
+    # Read Items and subitems from yaml file
+    data = read_yaml(Path("configs") / "available_arxiv_categories.yaml")
 
-    # print_dict(data)
+    # Create List of Items objects. 
+    # Each item in the list may or may not have nested subitems
+    items_list = []
+    itemid = 0
+    for key, value in data.items():
+        items_list.append(
+            Item(
+                id_=itemid,
+                title_= key,
+                value_=value,
+            )
+        )
+
+        itemid += 1
+    render_category.render_cat_and_subcat(page, items_list=items_list)
     
 
 if __name__ == "__main__":
-    # main()
     ft.app(main)
